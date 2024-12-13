@@ -1,0 +1,480 @@
+<!-- <form id="emailForm">
+    <label for="emailInput">Email:</label>
+    <input type="email" id="emailInput" name="email">
+    <div id="emailFeedback"></div>
+    <button type="button" id="submitBtn">Submit</button>
+  </form> -->
+
+  <!-- <div>
+    <textarea id="messageBox" placeholder="Type your message..." rows="5" cols="30"></textarea>
+    <p>Characters Counted: <span id="charCount">0</span></p>
+</div> -->
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio</title>
+    <style>
+        /* Base Styles */
+      
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        .about-content {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            text-align: left; /* Ensure text is aligned to the left */
+        }
+
+        .avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+
+        .avatar img {
+            width: 10px;
+            height: 10px;
+            
+        }
+
+        .about-text {
+            flex: 1; /* Make the text take available space */
+        }
+
+        .about-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .about-buttons a {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            padding: 10px 20px;
+            border-radius: 5px;
+            border: 1px solid black;
+            color: black;
+            font-size: 14px;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .about-buttons a:hover {
+            background-color: black;
+            color: #fff;
+        }
+
+        body.dark .about-buttons a {
+    background-color: #FEBA01;
+    color: #000; /* Black text color */
+    border-color: #000; /* Black border */
+}
+
+body.dark .about-buttons a:hover {
+    background-color: white; /* Black background on hover */
+    color: black; /* White text on hover */
+}
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            background-color: #f4f4f9;
+            color: #333;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        body.dark {
+            background-color: #121212;
+            color: #d1d1d1;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        /* Scroll Progress Bar */
+        #progressBar {
+            height: 4px;
+            background-color:#FEBA01;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 0;
+            z-index: 1000;
+        }
+
+        /* Header */
+        header {
+            background-color: #fff;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #ddd;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            transition: background-color 0.3s;
+        }
+      
+
+        header.dark {
+            background-color: #1f1f1f;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap:40px;
+        }
+
+        nav ul li button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 18px;
+            color: black;
+            transition: color 0.3s;
+            padding: 10px;
+        }
+
+        nav ul li button:hover {
+            color: black;
+            
+            border-radius: 5px;
+            background-color: #FEBA01;
+            box-shadow: 2px 2px 5px gray;
+        }
+
+        .toggle-container {
+            position: relative;
+            width: 50px;
+            height: 25px;
+            background: #ddd;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+
+        .toggle-container.dark {
+            background: black;
+        }
+
+        .toggle-circle {
+            position: absolute;
+            top: 3px;
+            left: 3px;
+            width: 19px;
+            height: 19px;
+            background: #fff;
+            border-radius: 50%;
+            transition: left 0.3s;
+        }
+
+        .toggle-container.dark .toggle-circle {
+            left: 26px;
+        }
+
+        /* Main Content */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+    
+        .card {
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+            padding: 50px;
+            margin: 20px auto;
+            width: 70%;
+            text-align: left;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .dark .card {
+            background-color: #1f1f1f;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .skills-bar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 15px 0;
+    position: relative;
+}
+
+.skills-bar label {
+    min-width: 100px;
+    font-weight: bold;
+}
+
+.bar-container {
+    flex: 1;
+    height: 20px;
+    background-color: #ddd;
+    position: relative;
+    border-radius: 5px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+}
+
+.bar-container::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: var(--fill);
+    background-color: #FEBA01;
+    border-radius: 5px;
+    z-index: 1;
+    transition: width 0.3s ease;
+}
+
+.percentage {
+    position: absolute;
+    right: 10px;
+    font-size: 12px;
+    font-weight: bold;
+    color: #333;
+    z-index: 2;
+}
+
+body.dark .bar-container::after {
+    background-color: #FEBA01; /* Yellow for dark mode */
+}
+        .list-item {
+            margin: 10px 0;
+        }
+
+        .list-item strong {
+            font-weight: bold;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 20px;
+            background-color: #fff;
+            border-top: 1px solid #ddd;
+        }
+
+        .dark footer {
+            background-color: #1f1f1f;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .card {
+                width: 90%;
+            }
+
+            header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            nav ul {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .about-content {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Scroll Progress Bar -->
+    <div id="progressBar"></div>
+
+    <!-- Header -->
+    <header>
+        <nav>
+            <ul>
+                <li><button onclick="scrollToSection('about')">About</button></li>
+                <li><button onclick="scrollToSection('internship')">Internship</button></li>
+                <li><button onclick="scrollToSection('projects')">Projects</button></li>
+                <li><button onclick="scrollToSection('education')">Education</button></li>
+                <li><button onclick="scrollToSection('skills')">Skills</button></li>
+                <li><button onclick="scrollToSection('contact')">Contact</button></li>
+            </ul>
+        </nav>
+        <div id="themeToggle" class="toggle-container">
+            <div class="toggle-circle"></div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="container">
+        <!-- About Section -->
+        <div class="card" id="about">
+            <div class="about-content">
+                <div class="">
+                    <img src="Photo2.jpg" height="164px" width="120px" alt="Priya Khairate">
+                </div>
+                <div class="about-text">
+                    <h1>SRITHAR Y</h1>
+                    <p>Hello, I'm Srithar!
+                        I am from Salem, Tamil Nadu, and recently graduated with a Bachelor’s degree in Computer Applications (BCA) from AVS College of Arts & Science,
+                         where I achieved a 70% score. With a solid foundation in computer applications and a passion for technology,
+                         I am eager to start my professional journey and contribute my skills to meaningful projects.
+                        
+                        </p>
+                </div>
+            </div>
+            <div class="about-buttons">
+                <a href="https://www.linkedin.com/in/srithar-y-509675295/" target="_blank">
+                    <img src="https://cdn-icons-png.flaticon.com/512/174/174857.png" alt="LinkedIn" style="width: 16px;">
+                    LinkedIn
+                </a>
+                <a href="https://github.com/" target="_blank">
+                    <img src="https://cdn-icons-png.flaticon.com/512/25/25231.png" alt="GitHub" style="width: 16px;">
+                    GitHub
+                </a>
+            </div>
+        </div>
+
+        <!-- Experience Section -->
+        <div class="card" id="experience">
+            <h2>Internship</h2> <hr><br>
+            <p><strong> <li>EMPIRE Informatics PVT LIM | July 2023 - Aug 2023 </li></strong></p>
+            <p>   During my web designing internship, I created and updated websites using HTML, CSS, and JavaScript. I worked on
+                improving website layouts to make them more user-friendly. I tested websites to ensure they were responsive and
+                worked on different devices. I collaborated with the team to implement client feedback and meet project goals.</p> <br>    
+        </div>
+
+        <!-- Projects Section -->
+        <div class="card" id="projects">
+            <h2>Projects</h2><hr><br>
+                <li class="list-item">
+                    <strong>Login and Registration Website</strong>
+                    <p><i><u>HTML, CSS, JavaScript | Oct 2024 - Nov 2024</u></i></p><br>
+                    <li><strong>Developed a responsive website featuring user login and registration functionality using HTML, CSS, and JavaScript.
+                        Designed intuitive forms with client-side validation to enhance user experience and security. Styled the interface with
+                        modern CSS, ensuring cross-browser compatibility and responsiveness across devices. Incorporated JavaScript to
+                        handle dynamic behavior and real-time error feedback. Focused on optimizing performance and creating an engaging,
+                        user-friendly interface. Strengthened skills in front-end development and interactive web design.
+                        </li>
+                </li><br> <hr><hr><hr>
+                <li class="list-item">
+                    <strong>Perfume Showcase Website</strong>
+                    <p><i><u>HTML, CSS | Oct 2024 - Nov 2024</u></i></p><br>
+                    <li>Designed and developed a mini project showcasing a perfume collection using HTML and CSS. The project featured a
+                        visually appealing layout, including a responsive design, image galleries, and detailed product descriptions. This project
+                        highlighted my skills in front-end development and creative web design.</li>
+                </li>
+            </ul>
+        </div>
+        
+        <!-- Education Section -->
+        <div class="card" id="education">
+            <h2>Education</h2><hr><br>
+            <ul>
+                <li><strong>Degree:</strong> AVS College Of Art's & Science<br><strong>Year:</strong> 2024<br><strong>CGPA:</strong>7.0</li> <br>
+                <li><strong>HSC:</strong> Government Higher Secondary School<br><strong>Year:</strong> 2021<br><strong>Percentage:</strong> 80%</li><br>
+            </ul>
+        </div>
+
+        <!-- Skills Section -->
+        <div class="card" id="skills">
+            <h2>Skills</h2>
+            <hr><br>
+            <div class="skills-bar">
+                <label>Java</label>
+                <span class="bar-container" style="--fill: 50%;">
+                    <span class="percentage">50%</span>
+                </span>
+            </div>
+            <div class="skills-bar">
+                <label>HTML5 </label>
+                <span class="bar-container" style="--fill: 80%;">
+                    <span class="percentage">80%</span>
+                </span>
+            </div>
+            <div class="skills-bar">
+                <label>CSS </label>
+                <span class="bar-container" style="--fill: 80%;">
+                    <span class="percentage">80%</span>
+                </span>
+            </div>
+            <div class="skills-bar">
+                <label>JavaScript</label>
+                <span class="bar-container" style="--fill: 60%;">
+                    <span class="percentage">60%</span>
+                </span>
+            </div>
+            <div class="skills-bar">
+                <label>SQL</label>
+                <span class="bar-container" style="--fill: 65%;">
+                    <span class="percentage">50%</span>
+                </span>
+            </div>
+        </div>
+        
+        
+        <!-- Contact Section -->
+        <div class="card" id="contact">
+            <h2>Contact</h2><hr><br>
+            <p>Email: <a href="mailto:tarun@example.com">sritharm79@gmail.com</a></p>
+            <p>Phone: +91 8825942977</p>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p>© 2024 Srithar. All rights reserved.</p>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+        const themeToggle = document.getElementById('themeToggle');
+        const body = document.body;
+
+        // Theme Toggle
+        themeToggle.addEventListener('click', () => {
+            body.classList.toggle('dark');
+            themeToggle.classList.toggle('dark');
+        });
+
+        // Scroll Progress
+        const progressBar = document.getElementById('progressBar');
+        window.addEventListener('scroll', () => {
+            const scrollTop = window.scrollY;
+            const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+            const scrolled = (scrollTop / docHeight) * 100;
+            progressBar.style.width = `${scrolled}%`;
+        });
+
+        // Scroll to Section
+        function scrollToSection(id) {
+            const section = document.getElementById(id);
+            if (section) {
+                section.scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+    </script>
+</body>
+</html>
